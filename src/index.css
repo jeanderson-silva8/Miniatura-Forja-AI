@@ -964,28 +964,14 @@ button:hover, a:has(button):hover {
     grid-template-columns: 1fr !important;
   }
   .pricing-grid-custom {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    justify-content: flex-start !important;
-    margin: 0 -24px;
-    padding: 0 24px 20px;
+    grid-template-columns: 1fr !important;
     gap: 16px !important;
-    scroll-padding: 24px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Firefox */
-  }
-  .pricing-grid-custom::-webkit-scrollbar {
-    display: none; /* Chrome/Safari */
   }
   .pricing-grid-custom .pricing-card {
-    min-width: 85vw;
-    scroll-snap-align: center;
-    flex-shrink: 0;
+    min-width: unset;
   }
   .pricing-grid-custom .pricing-card.pro {
-    order: -1; /* Centered initially */
+    order: -1; /* Keep PRO plan on top in mobile view */
   }
   .stats-row {
     flex-wrap: wrap;
@@ -1010,11 +996,12 @@ button:hover, a:has(button):hover {
   overflow-wrap: break-word;
 }
 
-  .pricing-grid-custom {
+.pricing-grid-custom {
   display: grid;
-  grid-template-columns: minmax(300px, 400px) minmax(300px, 450px);
+  grid-template-columns: 1fr;
   gap: 24px;
-  justify-content: center;
+  max-width: 450px;
+  margin: 0 auto;
   text-align: left;
 }
 
