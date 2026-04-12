@@ -150,12 +150,31 @@ a {
 .hero-bg {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.base-bg-video {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.15; /* Subtle background opacity */
+  /* Scale up by 15% and translate up slightly to push the bottom right watermark completely out of view */
+  transform: scale(1.15) translateY(-2%);
+}
+
+.base-bg-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
   background:
     radial-gradient(ellipse at 20% 50%, rgba(180, 30, 0, 0.35) 0%, transparent 60%),
     radial-gradient(ellipse at 80% 20%, rgba(200, 50, 0, 0.2) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 80%, rgba(120, 20, 0, 0.15) 0%, transparent 50%);
-  z-index: 0;
-  pointer-events: none;
+    radial-gradient(ellipse at 50% 80%, rgba(120, 20, 0, 0.15) 0%, transparent 50%),
+    linear-gradient(to bottom, transparent 0%, var(--bg-color) 100%);
+  z-index: 1;
 }
 
 .hero-bg::before {

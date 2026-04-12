@@ -76,7 +76,10 @@ function App() {
 
       {/* ===== HERO SECTION ===== */}
       <section id="hero" className="hero-section">
-        <div className="hero-bg"></div>
+        <div className="hero-bg">
+          <video autoPlay loop muted playsInline className="base-bg-video" src="/hero-bg.mp4" />
+          <div className="base-bg-overlay"></div>
+        </div>
         <div className="container">
           <div className="hero-content">
 
