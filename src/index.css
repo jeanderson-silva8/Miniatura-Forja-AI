@@ -996,10 +996,15 @@ button:hover, a:has(button):hover {
 /* Custom Grid Utility Classes */
 .payment-features-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
   text-align: left;
   margin-bottom: 40px;
+}
+
+.feature-card {
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
   .pricing-grid-custom {
