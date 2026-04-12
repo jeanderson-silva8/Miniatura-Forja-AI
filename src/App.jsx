@@ -225,7 +225,7 @@ function App() {
 
           <div className="payment-features-grid">
             <div className="feature-card" style={{background: 'rgba(34, 197, 94, 0.05)', border: '1px solid rgba(34, 197, 94, 0.2)', padding: '24px', borderRadius: '12px'}}>
-              <ShoppingBag size={20} color="#22c55e" style={{marginBottom: '16px'}} />
+              <Shield size={20} color="#22c55e" style={{marginBottom: '16px'}} />
               <h4 style={{color: '#fff', fontSize: '14px', marginBottom: '8px', fontWeight: 'bold'}}>Pagamento Único de $97</h4>
               <p style={{fontSize: '13px', color: 'rgba(255,255,255,0.6)', lineHeight: '1.5'}}>Pague apenas $97 e tenha acesso ilimitado para gerar miniaturas como quiser. Sem mensalidades.</p>
             </div>
