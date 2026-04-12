@@ -144,7 +144,6 @@ a {
 .hero-section {
   position: relative;
   padding: 60px 0 40px;
-  overflow: hidden;
 }
 
 .hero-bg {
@@ -958,6 +957,12 @@ button:hover, a:has(button):hover {
 
 /* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
+  .base-bg-video {
+    display: none !important;
+  }
+  .hero-bg {
+    background: radial-gradient(circle at 50% 50%, rgba(255, 0, 0, 0.1) 0%, var(--bg-color) 70%);
+  }
   .hero-content {
     grid-template-columns: 1fr;
   }

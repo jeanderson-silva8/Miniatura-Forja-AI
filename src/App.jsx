@@ -20,10 +20,12 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [thumbnails, setThumbnails] = useState([]);
   const [overlayTitle, setOverlayTitle] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleGenerate = async () => {
+    setErrorMsg('');
     if (!title && !topic) {
-      alert("Por favor, digite o título ou o tópico do seu vídeo primeiro.");
+      setErrorMsg("Por favor, digite o título ou o tópico do seu vídeo primeiro.");
       return;
     }
 
@@ -37,7 +39,16 @@ function App() {
         body: JSON.stringify({ title, topic, style, emotion }),
       });
 
-      const data = await response.json();
+      const text = await response.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (err) {
+        if (!response.ok) {
+          throw new Error(text.includes('504') ? 'O servidor demorou muito para responder (Timeout). Tente novamente.' : 'Erro interno no servidor ao gerar.');
+        }
+        throw new Error('Erro ao processar a resposta do servidor.');
+      }
 
       if (!response.ok) {
         throw new Error(data.error || 'Erro ao gerar miniatura');
@@ -46,7 +57,8 @@ function App() {
       setThumbnails(data.thumbnails);
       setOverlayTitle(data.title || title);
     } catch (error) {
-      alert('Erro ao gerar miniatura: ' + error.message);
+      console.error(error);
+      setErrorMsg(error.message || 'Erro ao gerar miniatura. Tente novamente.');
     } finally {
       setLoading(false);
     }
@@ -179,6 +191,12 @@ function App() {
                     </select>
                   </div>
                 </div>
+
+                {errorMsg && (
+                  <div style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', color: '#ef4444', padding: '12px', borderRadius: '8px', fontSize: '14px', marginTop: '4px' }}>
+                    {errorMsg}
+                  </div>
+                )}
 
                 <button className="btn-generate" onClick={handleGenerate} disabled={loading}>
                   {loading ? (
