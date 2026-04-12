@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Sparkles, Wand2, Star, Image as ImageIcon, CheckCircle2, Loader2, Download, Zap, Play, PenTool, Palette, BarChart3, Copy, Layers, Heart, Shield, Mail, Users, Lock, ShoppingBag, TrendingUp, FileText, Crown, Check } from 'lucide-react';
 
 const testimonialsList = [
-  { text: "Minhas miniaturas melhoraram instantaneamente. O ThumbnailForge AI gera exatamente o estilo que EU preciso para o meu canal de jogos. As visualizações subiram 40% no primeiro mês.", author: "Jake Roberts", role: "Criador de jogos", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face" },
+  { text: "Minhas miniaturas melhoraram instantaneamente. O Miniatura Forja AI gera exatamente o estilo que EU preciso para o meu canal de jogos. As visualizações subiram 40% no primeiro mês.", author: "Jake Roberts", role: "Criador de jogos", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face" },
   { text: "Uma maneira rápida de criar miniaturas sem Photoshop. Costumava ficar 2 horas em cada miniatura. Agora leva 30 segundos e os resultados são melhores.", author: "Emily Chen", role: "YouTuber Tech", avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face" },
   { text: "Ótima ferramenta para gerar ideias rapidamente. Mesmo quando não uso a miniatura da IA diretamente, ela me dá uma inspiração incrível para meus próprios designs.", author: "Lucas Rivera", role: "Criador de conteúdo", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face" },
   { text: "Aumentei meu CTR em mais de 50%. A facilidade de testar opções no mesmo vídeo me deu uma vantagem competitiva gigantesca no nicho financeiro.", author: "Amanda Silva", role: "Finanças e Negócios", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop&crop=face" },
@@ -91,7 +91,7 @@ function App() {
                 <span className="yt-word">virais para o<br/>YouTube</span> com IA.
               </h1>
               <p className="hero-desc">
-                O ThumbnailForge AI ajuda os YouTubers a gerar miniaturas atraentes em segundos. 
+                O Miniatura Forja AI ajuda os YouTubers a gerar miniaturas atraentes em segundos. 
                 Descreva seu vídeo, escolha um estilo e deixe a IA gerar uma miniatura com alta taxa de cliques, 
                 pronta para seu próximo upload.
               </p>
@@ -535,7 +535,7 @@ function App() {
             </div>
           </div>
           <div className="footer-copyright">
-            © 2026 ThumbnailForge AI. Todos os direitos reservados.
+            © 2026 Miniatura Forja AI. Todos os direitos reservados.
           </div>
         </div>
       </footer>
