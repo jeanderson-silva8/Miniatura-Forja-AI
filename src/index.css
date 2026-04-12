@@ -960,8 +960,62 @@ button:hover, a:has(button):hover {
   .footer-grid {
     grid-template-columns: 1fr;
   }
+  .payment-features-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .pricing-grid-custom {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    justify-content: flex-start !important;
+    margin: 0 -24px;
+    padding: 0 24px 20px;
+    gap: 16px !important;
+    scroll-padding: 24px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+  }
+  .pricing-grid-custom::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+  .pricing-grid-custom .pricing-card {
+    min-width: 85vw;
+    scroll-snap-align: center;
+    flex-shrink: 0;
+  }
+  .pricing-grid-custom .pricing-card.pro {
+    order: -1; /* Centered initially */
+  }
   .stats-row {
     flex-wrap: wrap;
     gap: 20px;
   }
+}
+
+/* Custom Grid Utility Classes */
+.payment-features-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px;
+  text-align: left;
+  margin-bottom: 40px;
+}
+
+  .pricing-grid-custom {
+  display: grid;
+  grid-template-columns: minmax(300px, 400px) minmax(300px, 450px);
+  gap: 24px;
+  justify-content: center;
+  text-align: left;
+}
+
+/* Floating Icon Animation */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0px); }
+}
+.floating-icon {
+  animation: float 2.5s ease-in-out infinite;
 }

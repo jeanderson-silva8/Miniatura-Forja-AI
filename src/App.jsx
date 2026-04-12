@@ -223,13 +223,7 @@ function App() {
             Adquira agora por um preço especial de lançamento e receba o <strong style={{color: 'var(--primary-yellow)'}}>modelo PRO ilimitado</strong> diretamente na sua conta. Sem complicações. Sem mensalidades ocultas. Total transparência.
           </p>
 
-          <div className="payment-features-grid" style={{
-            display: 'grid', 
-            gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr)', 
-            gap: '20px', 
-            textAlign: 'left', 
-            marginBottom: '40px'
-          }}>
+          <div className="payment-features-grid">
             <div className="feature-card" style={{background: 'rgba(34, 197, 94, 0.05)', border: '1px solid rgba(34, 197, 94, 0.2)', padding: '24px', borderRadius: '12px'}}>
               <ShoppingBag size={20} color="#22c55e" style={{marginBottom: '16px'}} />
               <h4 style={{color: '#fff', fontSize: '14px', marginBottom: '8px', fontWeight: 'bold'}}>Pagamento Único de $97</h4>
@@ -440,9 +434,7 @@ function App() {
             Comece grátis, atualize quando estiver pronto. Sem<br/>assinaturas.
           </p>
 
-          <div className="pricing-grid-custom" style={{
-            display: 'grid', gridTemplateColumns: 'minmax(300px, 400px) minmax(300px, 450px)', gap: '24px', justifyContent: 'center', textAlign: 'left'
-          }}>
+          <div className="pricing-grid-custom">
             {/* Free */}
             <div className="pricing-card" style={{
               background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', padding: '40px'
@@ -478,7 +470,7 @@ function App() {
                 MAIS POPULARES
               </div>
               <div style={{display:'flex', alignItems:'center', gap:'8px', marginBottom:'24px'}}>
-                <Crown size={24} color="#FACC15" />
+                <Crown size={24} color="#FACC15" className="floating-icon" />
                 <h4 className="font-heading" style={{fontSize:'18px', color:'#fff', margin:0}}>PRÔ</h4>
               </div>
               <div className="pricing-price font-heading" style={{fontSize: '48px', color: '#fff'}}>R$ 97</div>
