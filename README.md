@@ -1,4 +1,4 @@
-# 🎨 Thumbnail Forge — Gerador de Thumbnails
+# 🎨 Miniatura Forja AI— Gerador de Miniaturas
 
 > Aplicação **Full Stack** para criação e geração de thumbnails profissionais, construída com **React**, **Vite** e backend **Node.js** — com vídeo de fundo cinematográfico e ErrorBoundary para resiliência.
 
