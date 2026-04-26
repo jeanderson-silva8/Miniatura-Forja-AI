@@ -12,7 +12,7 @@
 
 ## 🖼️ Sobre o Projeto
 
-O **Thumbnail Forge** é uma ferramenta para criação de thumbnails profissionais. Combinando um frontend React com um backend Node.js e API serverless, o projeto permite gerar, personalizar e exportar thumbnails de alta qualidade para uso em vídeos, redes sociais e conteúdo digital.
+O ** Miniatura Forja AI ** é uma ferramenta para criação de thumbnails profissionais. Combinando um frontend React com um backend Node.js e API serverless, o projeto permite gerar, personalizar e exportar thumbnails de alta qualidade para uso em vídeos, redes sociais e conteúdo digital.
 
 ### ✨ Features
 
