@@ -273,27 +273,33 @@ function App() {
           </h2>
           <div className="steps-grid">
             <div className="step-card" style={{position: 'relative'}}>
-              <div style={{position: 'absolute', top: '10px', left: '50%', transform: 'translateX(-50%)', fontSize: '90px', fontWeight: '900', color: 'rgba(239, 68, 68, 0.07)', zIndex: 0, lineHeight: 1, letterSpacing: '-2px'}}>01</div>
-              <div className="step-icon" style={{position: 'relative', zIndex: 1, margin: '20px auto 24px', width: '70px', height: '70px', borderRadius: '18px', border: '1px solid rgba(239, 68, 68, 0.3)', background: 'rgba(239, 68, 68, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                <FileText size={30} color="#ef4444" />
+              <div style={{position: 'relative', height: '140px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px'}}>
+                <div style={{position: 'absolute', fontSize: '130px', fontWeight: '900', color: 'rgba(239, 68, 68, 0.06)', zIndex: 0, lineHeight: 1, letterSpacing: '-6px', userSelect: 'none', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>01</div>
+                <div className="step-icon" style={{position: 'relative', zIndex: 1, width: '76px', height: '76px', borderRadius: '20px', border: '1px solid rgba(239, 68, 68, 0.3)', background: 'rgba(239, 68, 68, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 0, backdropFilter: 'blur(6px)', boxShadow: '0 8px 32px rgba(239, 68, 68, 0.1)'}}>
+                  <FileText size={34} color="#ef4444" />
+                </div>
               </div>
               <h3 className="font-heading" style={{position: 'relative', zIndex: 1}}>Descreva seu vídeo</h3>
               <p style={{position: 'relative', zIndex: 1}}>Insira o título e o tópico do seu vídeo para fornecer à IA o contexto necessário.</p>
             </div>
             
             <div className="step-card" style={{position: 'relative'}}>
-              <div style={{position: 'absolute', top: '10px', left: '50%', transform: 'translateX(-50%)', fontSize: '90px', fontWeight: '900', color: 'rgba(250, 204, 21, 0.07)', zIndex: 0, lineHeight: 1, letterSpacing: '-2px'}}>02</div>
-              <div className="step-icon" style={{position: 'relative', zIndex: 1, margin: '20px auto 24px', width: '70px', height: '70px', borderRadius: '18px', border: '1px solid rgba(250, 204, 21, 0.3)', background: 'rgba(250, 204, 21, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                <Palette size={30} color="#FACC15" />
+              <div style={{position: 'relative', height: '140px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px'}}>
+                <div style={{position: 'absolute', fontSize: '130px', fontWeight: '900', color: 'rgba(250, 204, 21, 0.06)', zIndex: 0, lineHeight: 1, letterSpacing: '-6px', userSelect: 'none', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>02</div>
+                <div className="step-icon" style={{position: 'relative', zIndex: 1, width: '76px', height: '76px', borderRadius: '20px', border: '1px solid rgba(250, 204, 21, 0.3)', background: 'rgba(250, 204, 21, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 0, backdropFilter: 'blur(6px)', boxShadow: '0 8px 32px rgba(250, 204, 21, 0.1)'}}>
+                  <Palette size={34} color="#FACC15" />
+                </div>
               </div>
               <h3 className="font-heading" style={{position: 'relative', zIndex: 1}}>Escolha um estilo</h3>
               <p style={{position: 'relative', zIndex: 1}}>Selecione um estilo de miniatura usado por criadores de conteúdo viral e pelos principais YouTubers.</p>
             </div>
             
             <div className="step-card" style={{position: 'relative'}}>
-              <div style={{position: 'absolute', top: '10px', left: '50%', transform: 'translateX(-50%)', fontSize: '90px', fontWeight: '900', color: 'rgba(34, 197, 94, 0.07)', zIndex: 0, lineHeight: 1, letterSpacing: '-2px'}}>03</div>
-              <div className="step-icon" style={{position: 'relative', zIndex: 1, margin: '20px auto 24px', width: '70px', height: '70px', borderRadius: '18px', border: '1px solid rgba(34, 197, 94, 0.3)', background: 'rgba(34, 197, 94, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                <Sparkles size={30} color="#22c55e" />
+              <div style={{position: 'relative', height: '140px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px'}}>
+                <div style={{position: 'absolute', fontSize: '130px', fontWeight: '900', color: 'rgba(34, 197, 94, 0.06)', zIndex: 0, lineHeight: 1, letterSpacing: '-6px', userSelect: 'none', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>03</div>
+                <div className="step-icon" style={{position: 'relative', zIndex: 1, width: '76px', height: '76px', borderRadius: '20px', border: '1px solid rgba(34, 197, 94, 0.3)', background: 'rgba(34, 197, 94, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 0, backdropFilter: 'blur(6px)', boxShadow: '0 8px 32px rgba(34, 197, 94, 0.1)'}}>
+                  <Sparkles size={34} color="#22c55e" />
+                </div>
               </div>
               <h3 className="font-heading" style={{position: 'relative', zIndex: 1}}>Gere com IA</h3>
               <p style={{position: 'relative', zIndex: 1}}>Obtenha miniaturas prontas para download instantaneamente com geração baseada em IA.</p>
