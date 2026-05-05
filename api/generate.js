@@ -1,13 +1,47 @@
 import { fal } from '@fal-ai/client';
 
 export const config = {
-  maxDuration: 60, // Maximum timeout for Vercel functions (Pro max is 300s, Hobby is 10s but setting 60s requests more if allowed)
+  maxDuration: 60,
 };
 
-// Configuração é puxada automaticamente do process.env.FAL_KEY no ambiente Vercel
+// ═══════════════════════════════════════════════════════
+// 🛡️ PROTOCOLO DE SEGURANÇA ENTERPRISE — VERCEL SERVERLESS
+// ═══════════════════════════════════════════════════════
+
 fal.config({
   credentials: process.env.FAL_KEY,
 });
+
+// [SEGURANÇA] Sanitização de inputs
+function sanitizeString(str, maxLength = 200) {
+  if (typeof str !== 'string') return '';
+  return str.replace(/[<>{}]/g, '').trim().slice(0, maxLength);
+}
+
+const VALID_STYLES = ['mrbeast', 'gaming', 'tech', 'reaction', 'minimalist'];
+const VALID_EMOTIONS = ['shock', 'excitement', 'curiosity', 'urgency', 'neutral'];
+
+// [SEGURANÇA] Rate Limiting simples em memória para Serverless
+const rateLimitMap = new Map();
+const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minuto
+const RATE_LIMIT_MAX = 5; // 5 gerações por minuto por IP
+
+function checkRateLimit(ip) {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+  
+  if (!entry || now - entry.windowStart > RATE_LIMIT_WINDOW) {
+    rateLimitMap.set(ip, { windowStart: now, count: 1 });
+    return true;
+  }
+  
+  if (entry.count >= RATE_LIMIT_MAX) {
+    return false;
+  }
+  
+  entry.count++;
+  return true;
+}
 
 const STYLE_PROMPTS = {
   mrbeast:
@@ -31,19 +65,42 @@ const EMOTION_MODIFIERS = {
 };
 
 export default async function handler(req, res) {
+  // [SEGURANÇA] CORS restrito
+  const allowedOrigins = ['https://thumbnail-forge-one.vercel.app', 'http://localhost:5173'];
+  const origin = req.headers.origin;
+  if (origin && allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
+  // [SEGURANÇA] Rate Limiting por IP
+  const clientIp = req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown';
+  if (!checkRateLimit(clientIp)) {
+    return res.status(429).json({ error: 'Limite de geração atingido. Aguarde 1 minuto.' });
+  }
+
   try {
-    const { title, topic, style, emotion } = req.body;
+    // [SEGURANÇA] Sanitização de todos os inputs
+    const title = sanitizeString(req.body?.title, 100);
+    const topic = sanitizeString(req.body?.topic, 200);
+    const style = VALID_STYLES.includes(req.body?.style) ? req.body.style : 'mrbeast';
+    const emotion = VALID_EMOTIONS.includes(req.body?.emotion) ? req.body.emotion : 'shock';
 
     if (!title && !topic) {
       return res.status(400).json({ error: 'Título ou tópico é obrigatório.' });
     }
 
-    const stylePrompt = STYLE_PROMPTS[style] || STYLE_PROMPTS.mrbeast;
-    const emotionMod = EMOTION_MODIFIERS[emotion] || EMOTION_MODIFIERS.shock;
+    const stylePrompt = STYLE_PROMPTS[style];
+    const emotionMod = EMOTION_MODIFIERS[emotion];
 
     const prompt1 = `Professional viral YouTube thumbnail, 1280x720 landscape. Scene: ${topic}. The thumbnail MUST feature GIANT, MASSIVE, bold stylized 3D text saying "${title}" with thick outline, glow effects and drop shadow. The text MUST be the largest element in the image, extremely prominent and highly legible. ${emotionMod}. ${stylePrompt}. No borders, no mockup frames, no watermarks, perfectly rendered typography.`;
 
@@ -69,8 +126,9 @@ export default async function handler(req, res) {
       ],
     });
   } catch (error) {
-    console.error('Erro na Vercel Function:', error);
-    const msg = error?.body?.detail || error?.message || 'Erro desconhecido';
+    // [SEGURANÇA] Log Seguro
+    console.error('[FAL.AI] Erro na Vercel Function:', error?.status || 'UNKNOWN');
+    const msg = error?.body?.detail || 'Erro ao gerar miniaturas. Tente novamente.';
     return res.status(500).json({ error: msg });
   }
 }

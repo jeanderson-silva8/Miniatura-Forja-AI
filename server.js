@@ -1,9 +1,14 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import * as falClient from '@fal-ai/client';
 
-// === Configuração ===
+// ═══════════════════════════════════════════════════════
+// 🛡️ PROTOCOLO DE SEGURANÇA ENTERPRISE — MINIATURA FORJA AI
+// ═══════════════════════════════════════════════════════
+
 const PORT = 3001;
 
 falClient.fal.config({
@@ -11,8 +16,51 @@ falClient.fal.config({
 });
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+
+// [SEGURANÇA] Headers HTTP de proteção (Helmet)
+app.use(helmet());
+
+// [SEGURANÇA] CORS Restrito — Aceita APENAS o frontend autorizado
+const allowedOrigins = [
+  'https://thumbnail-forge-one.vercel.app',
+  'http://localhost:5173',
+  'http://localhost:3000'
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error('Bloqueado pela política de CORS'));
+  },
+  credentials: true
+}));
+
+// [SEGURANÇA] Rate Limiting CRÍTICO — Cada request gasta créditos de IA ($$$)
+const generateLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minuto
+  max: 3, // Máximo 3 gerações por minuto por IP
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Limite de geração atingido. Aguarde 1 minuto para gerar novas miniaturas.' }
+});
+
+app.use(express.json({ limit: '10kb' })); // Anti payload bomb
+
+// ═══════════════════════════════════════════════════════
+// 🛡️ SANITIZAÇÃO DE INPUTS
+// ═══════════════════════════════════════════════════════
+
+function sanitizeString(str, maxLength = 200) {
+  if (typeof str !== 'string') return '';
+  // Remove caracteres potencialmente perigosos para prompt injection
+  return str.replace(/[<>{}]/g, '').trim().slice(0, maxLength);
+}
+
+const VALID_STYLES = ['mrbeast', 'gaming', 'tech', 'reaction', 'minimalist'];
+const VALID_EMOTIONS = ['shock', 'excitement', 'curiosity', 'urgency', 'neutral'];
 
 // === Prompts Invisíveis ULTRA-DETALHADOS para Thumbnails Virais ===
 const STYLE_PROMPTS = {
@@ -36,17 +84,21 @@ const EMOTION_MODIFIERS = {
   neutral: 'confident calm professional look, direct eye contact with camera, clean balanced composition, soft even professional lighting',
 };
 
-// === Endpoint de Geração (2 miniaturas) ===
-app.post('/api/generate', async (req, res) => {
+// === Endpoint de Geração (2 miniaturas) — COM RATE LIMITING ===
+app.post('/api/generate', generateLimiter, async (req, res) => {
   try {
-    const { title, topic, style, emotion } = req.body;
+    // [SEGURANÇA] Sanitização de todos os inputs
+    const title = sanitizeString(req.body.title, 100);
+    const topic = sanitizeString(req.body.topic, 200);
+    const style = VALID_STYLES.includes(req.body.style) ? req.body.style : 'mrbeast';
+    const emotion = VALID_EMOTIONS.includes(req.body.emotion) ? req.body.emotion : 'shock';
 
     if (!title && !topic) {
       return res.status(400).json({ error: 'Título ou tópico é obrigatório.' });
     }
 
-    const stylePrompt = STYLE_PROMPTS[style] || STYLE_PROMPTS.mrbeast;
-    const emotionMod = EMOTION_MODIFIERS[emotion] || EMOTION_MODIFIERS.shock;
+    const stylePrompt = STYLE_PROMPTS[style];
+    const emotionMod = EMOTION_MODIFIERS[emotion];
 
     // Prompt 1: Cena com texto gigante
     const prompt1 = `Professional viral YouTube thumbnail, 1280x720 landscape. Scene: ${topic}. The thumbnail MUST feature GIANT, MASSIVE, bold stylized 3D text saying "${title}" with thick outline, glow effects and drop shadow. The text MUST be the largest element in the image, extremely prominent and highly legible. ${emotionMod}. ${stylePrompt}. No borders, no mockup frames, no watermarks, perfectly rendered typography.`;
@@ -54,9 +106,8 @@ app.post('/api/generate', async (req, res) => {
     // Prompt 2: Foco em pessoa + ação dramática + texto enorme
     const prompt2 = `Professional viral YouTube thumbnail, 1280x720 landscape. Theme: ${topic}. A dramatic photorealistic scene with expressive person reacting, large yellow arrows pointing at the main subject, and MASSIVE bold impactful text "${title.split(' ').slice(0, 3).join(' ')}" with thick 3D outline and glow. The text MUST be huge and take up at least 30% of the image. ${emotionMod}. ${stylePrompt}. Ultra detailed, cinematic, no borders, no mockup frames, perfect typography.`;
 
-    console.log(`\n[FAL.AI] 🎨 Gerando 2 miniaturas com FLUX Dev (alta qualidade)...`);
-    console.log(`[FAL.AI] Estilo: ${style} | Emoção: ${emotion}`);
-    console.log(`[FAL.AI] Título (gerado pela IA na imagem): "${title}"`);
+    // [SEGURANÇA] Log Seguro — não imprime dados do usuário
+    console.log(`[FAL.AI] Gerando 2 miniaturas | Estilo: ${style} | Emoção: ${emotion}`);
 
     // Gerar as 2 imagens em paralelo usando FLUX Dev (qualidade superior)
     const [result1, result2] = await Promise.all([
@@ -70,7 +121,7 @@ app.post('/api/generate', async (req, res) => {
         },
         logs: true,
         onQueueUpdate: (u) => {
-          if (u.status === 'IN_QUEUE') console.log(`[FAL.AI] 🔄 Miniatura 1 na fila...`);
+          if (u.status === 'IN_QUEUE') console.log(`[FAL.AI] Miniatura 1 na fila...`);
         },
       }),
       falClient.fal.subscribe('fal-ai/flux/dev', {
@@ -83,7 +134,7 @@ app.post('/api/generate', async (req, res) => {
         },
         logs: true,
         onQueueUpdate: (u) => {
-          if (u.status === 'IN_QUEUE') console.log(`[FAL.AI] 🔄 Miniatura 2 na fila...`);
+          if (u.status === 'IN_QUEUE') console.log(`[FAL.AI] Miniatura 2 na fila...`);
         },
       }),
     ]);
@@ -91,11 +142,10 @@ app.post('/api/generate', async (req, res) => {
     const image1 = result1.data.images[0].url;
     const image2 = result2.data.images[0].url;
 
-    console.log(`[FAL.AI] ✅ Miniatura 1 gerada!`);
-    console.log(`[FAL.AI] ✅ Miniatura 2 gerada!`);
+    console.log(`[FAL.AI] ✅ 2 miniaturas geradas com sucesso.`);
 
     res.json({
-      title, // Envia o título de volta para o overlay digital
+      title,
       thumbnails: [
         { imageUrl: image1, ctrScore: Math.floor(Math.random() * 16) + 70 },
         { imageUrl: image2, ctrScore: Math.floor(Math.random() * 16) + 75 },
@@ -103,8 +153,9 @@ app.post('/api/generate', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('[FAL.AI] ❌ Erro:', error);
-    const msg = error?.body?.detail || error?.message || 'Erro desconhecido';
+    // [SEGURANÇA] Log Seguro — nunca expor stack trace completo
+    console.error('[FAL.AI] Erro na geração:', error?.status || 'UNKNOWN');
+    const msg = error?.body?.detail || 'Erro ao gerar miniaturas. Tente novamente.';
     res.status(500).json({ error: msg });
   }
 });
