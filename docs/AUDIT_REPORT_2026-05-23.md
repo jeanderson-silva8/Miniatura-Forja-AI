@@ -65,7 +65,7 @@ commit d402e7df... chore: remove .env from tracking and update app name
 commit f5f724ad... chore: add FAL_KEY environment variable for API authentication
 
 $ git show f5f724ad:.env
-FAL_KEY=9e3137f5-8a80-4b26-ac57-762bce673150:7b29b5e4d2402556331d5b32c6faacb4
+FAL_KEY=9e31…acb4 [REVOGADA em 2026-05-23 — vetor inerte; valor completo redactado em peer review v3+1]
 
 $ git remote -v
 origin  https://github.com/silvajeanderson165-creator/thumbnail-forge.git (push)
@@ -85,7 +85,7 @@ A chave foi commitada em `f5f724a` ("chore: add FAL_KEY environment variable for
 **Itens do checklist violados:** **13** (segredos fora do código versionado) e **58** (segredos no bundle público — neste caso o "bundle" é o histórico do git, mesma classe de vetor).
 
 **Remediação (não aplicada nesta auditoria — fase 2):**
-1. **Rotacionar IMEDIATAMENTE** a chave no dashboard fal.ai → revogar `9e3137f5-...` → gerar nova.
+1. **Rotacionar IMEDIATAMENTE** a chave no dashboard fal.ai → revogar a chave antiga `9e31…acb4` (já feito em 2026-05-23) → gerar nova.
 2. Atualizar `FAL_KEY` nas Environment Variables da Vercel com a chave nova.
 3. (Opcional) Reescrever histórico para purgar a chave: `git filter-repo --path .env --invert-paths` ou similar — útil para "limpeza", mas a chave antiga já está em caches públicos (GitHub mirrors, Wayback, etc.) e deve ser tratada como permanentemente comprometida independentemente.
 4. Adicionar pre-commit hook (`gitleaks` ou `trufflehog`) para impedir reincidência.

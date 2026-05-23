@@ -19,7 +19,6 @@ function App() {
   const [topic, setTopic] = useState('');
   const [loading, setLoading] = useState(false);
   const [thumbnails, setThumbnails] = useState([]);
-  const [overlayTitle, setOverlayTitle] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
   const handleGenerate = async () => {
@@ -43,7 +42,7 @@ function App() {
       let data;
       try {
         data = JSON.parse(text);
-      } catch (err) {
+      } catch {
         if (!response.ok) {
           throw new Error(text.includes('504') ? 'O servidor demorou muito para responder (Timeout). Tente novamente.' : 'Erro interno no servidor ao gerar.');
         }
@@ -55,7 +54,6 @@ function App() {
       }
 
       setThumbnails(data.thumbnails);
-      setOverlayTitle(data.title || title);
     } catch (error) {
       console.error(error);
       setErrorMsg(error.message || 'Erro ao gerar miniatura. Tente novamente.');

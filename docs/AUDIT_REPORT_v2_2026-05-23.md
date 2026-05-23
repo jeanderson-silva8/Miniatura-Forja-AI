@@ -91,7 +91,7 @@ O leak da v1 (`FAL_KEY=9e3137f5-...`) foi documentado em `docs/AUDIT_REPORT_2026
 
 ```bash
 $ grep -rn '9e3137f5' docs/
-docs/AUDIT_REPORT_2026-05-23.md:68:FAL_KEY=9e3137f5-8a80-4b26-ac57-762bce673150:7b29b5e4d2402556331d5b32c6faacb4
+docs/AUDIT_REPORT_2026-05-23.md:68:FAL_KEY=9e31…acb4 [REVOGADA 2026-05-23]
 docs/AUDIT_REPORT_2026-05-23.md:88:1. **Rotacionar IMEDIATAMENTE** a chave no dashboard fal.ai → revogar `9e3137f5-...` → gerar nova.
 ```
 

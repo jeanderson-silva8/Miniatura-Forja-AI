@@ -1,0 +1,93 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-test-audit:
+    name: Lint + tests + audit + secret-guard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests (Vitest — 33 testes adversariais)
+        run: npm test
+
+      - name: Build (valida que o bundle sai)
+        run: npm run build
+
+      - name: Audit deps (fail em high+)
+        run: npm audit --audit-level=high --omit=dev
+
+      # [SEGURANÇA] Item 58 do framework: guard de segredo no bundle público.
+      - name: Guard — nenhum padrão de segredo no dist/
+        run: |
+          set -e
+          if grep -rE '(sk_live_|sk_test_|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----|ghp_[A-Za-z0-9]{36}|FAL_KEY=[a-f0-9])' dist/; then
+            echo "::error::Padrão de segredo encontrado no bundle público — ver item 58 do AUDIT_CHECKLIST.md"
+            exit 1
+          fi
+          echo "✓ Nenhum padrão de segredo no dist/."
+
+  smoke-test-prod:
+    name: Smoke test pós-deploy (item 17 do framework — deploy hygiene)
+    runs-on: ubuntu-latest
+    needs: build-test-audit
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      # [SEGURANÇA] Lição da auditoria v2 do Miniatura Forja AI: "código novo
+      # commitado" ≠ "código novo em produção". Este job aguarda o deploy da
+      # Vercel propagar e bate `curl` na URL pública confirmando que as defesas
+      # críticas estão ATIVAS, não apenas no commit local.
+      - name: Aguarda propagação do deploy Vercel
+        run: sleep 60
+
+      - name: Headers de segurança presentes no frontend (/)
+        run: |
+          set -e
+          HEADERS=$(curl -sS -I https://thumbnail-forge-one.vercel.app/)
+          echo "$HEADERS" | grep -qi 'content-security-policy' || (echo "::error::CSP ausente"; exit 1)
+          echo "$HEADERS" | grep -qi 'x-frame-options' || (echo "::error::X-Frame-Options ausente"; exit 1)
+          echo "$HEADERS" | grep -qi 'permissions-policy' || (echo "::error::Permissions-Policy ausente"; exit 1)
+          echo "✓ Headers do vercel.json aplicados."
+
+      - name: CORS bloqueante na API com origin malicioso
+        run: |
+          set -e
+          STATUS=$(curl -sS -o /dev/null -w '%{http_code}' \
+            -X POST \
+            -H 'Origin: https://evil.com' \
+            -H 'Content-Type: application/json' \
+            -d '{"title":"x"}' \
+            https://thumbnail-forge-one.vercel.app/api/generate)
+          if [ "$STATUS" != "403" ]; then
+            echo "::error::CORS NÃO está bloqueando origem maliciosa (HTTP $STATUS em vez de 403)"
+            exit 1
+          fi
+          echo "✓ CORS retornou 403 a origin não-allowlist."
+
+      - name: Headers manuais setados pela API
+        run: |
+          set -e
+          API_HEADERS=$(curl -sS -I -X POST \
+            -H 'Origin: https://thumbnail-forge-one.vercel.app' \
+            -H 'Content-Type: application/json' \
+            -d '{}' \
+            https://thumbnail-forge-one.vercel.app/api/generate)
+          echo "$API_HEADERS" | grep -qi 'x-content-type-options' || (echo "::error::nosniff ausente"; exit 1)
+          echo "$API_HEADERS" | grep -qi 'referrer-policy' || (echo "::error::Referrer-Policy ausente"; exit 1)
+          echo "✓ Headers manuais da API ativos em produção."

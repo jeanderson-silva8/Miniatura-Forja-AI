@@ -115,7 +115,7 @@ A string `FAL_KEY=9e3137f5-...` (chave **já revogada** na fal.ai) permanece em 
 
 ```bash
 # Redactar a string nos 2 pontos do relatório
-sed -i 's/9e3137f5-8a80-4b26-ac57-762bce673150:7b29b5e4d2402556331d5b32c6faacb4/9e31...acb4 (REDACTED — revogada)/g' docs/AUDIT_REPORT_2026-05-23.md
+sed -i 's/9e31…acb4 [REVOGADA 2026-05-23]/9e31...acb4 (REDACTED — revogada)/g' docs/AUDIT_REPORT_2026-05-23.md
 git add docs/AUDIT_REPORT_2026-05-23.md
 git commit -m "docs(audit): redactar string da chave revogada (cosmético)"
 git push
