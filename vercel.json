@@ -1,0 +1,20 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "headers": [
+    {
+      "_comment": "Headers de segurança aplicados a TODAS as respostas do frontend estático. A função serverless /api/generate seta seus próprios headers em api/generate.js. Auditoria 2026-05-23. CSP usa 'unsafe-inline' em script-src por limitação do bootstrap do Vite (documentado em docs/adr/ADR-003-csp-unsafe-inline.md — mesmo trade-off do Nexus Portal).",
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://images.unsplash.com https://*.fal.media https://fal.media; media-src 'self'; connect-src 'self'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'"
+        },
+        { "key": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains; preload" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "geolocation=(), microphone=(), camera=(), payment=(), usb=()" }
+      ]
+    }
+  ]
+}

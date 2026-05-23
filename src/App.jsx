@@ -146,7 +146,7 @@ function App() {
             <div id="generator" className="generator-card">
               <div className="generator-header">
                 <h3 className="font-heading"><Sparkles size={18} color="#FACC15" /> Gerador de miniaturas com IA</h3>
-                <span className="free-tag">3/3 grátis hoje</span>
+                <span className="free-tag">5 grátis por minuto</span>
               </div>
               <div className="generator-form">
                 <div className="form-group">
