@@ -2,7 +2,6 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "headers": [
     {
-      "_comment": "Headers de segurança aplicados a TODAS as respostas do frontend estático. A função serverless /api/generate seta seus próprios headers em api/generate.js. Auditoria 2026-05-23. CSP usa 'unsafe-inline' em script-src por limitação do bootstrap do Vite (documentado em docs/adr/ADR-003-csp-unsafe-inline.md — mesmo trade-off do Nexus Portal).",
       "source": "/(.*)",
       "headers": [
         {
